@@ -19,7 +19,7 @@ function OnLoad()
 	RivenConfig:addParam("Killsteal", "Killsteal With Ult", SCRIPT_PARAM_ONOFF, true)
 	RivenConfig:addParam("Ult", "Use Ult In Combo", SCRIPT_PARAM_ONOFF, true)
 	RivenConfig:addParam("Movement", "Move To Mouse", SCRIPT_PARAM_ONOFF, true)
-	ts = TargetSelector(TARGET_LESS_CAST_PRIORITY, 500, DAMAGE_PHYSICAL)
+	ts = TargetSelector(TARGET_LOW_HP_PRIORITY, 500, DAMAGE_PHYSICAL)
 	ts.name = "Riven"
 	RivenConfig:addTS(ts)
 	enemies = GetEnemyHeroes()
