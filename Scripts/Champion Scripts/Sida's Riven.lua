@@ -8,6 +8,8 @@ local disableMovement = false
 local lastAttack = 0
 local qCount = 0
 local rCast = 0
+local enemyMinions
+local tick, delay = 0, 400
 
 function OnLoad()
 	RivenConfig = scriptConfig("Sida's Riven", "sidasriven")
@@ -21,18 +23,20 @@ function OnLoad()
 	ts.name = "Riven"
 	RivenConfig:addTS(ts)
 	enemies = GetEnemyHeroes()
-	--DoPriority()
+	DoPriority()
 	enemyMinions = minionManager(MINION_ENEMY, 850, myHero, MINION_SORT_HEALTH_ASC)
 end
 
 function OnTick()
 	disableMovement = false
 	ts:update()
+	enemyMinions:update()
 	if myHero:CanUseSpell(_Q) ~= READY and GetTickCount() > lastQ + 1000 then qCount = 0 end
 	if RivenConfig.Killsteal then Killsteal() end
 	if RivenConfig.Harass then Harass() end
 	if RivenConfig.Combo then Combo() end
-	if RivenConfig.Movement and ((RivenConfig.Combo or RivenConfig.Harass or RivenConfig.Farm) and not disableMovement) then myHero:MoveTo(mousePos.x, mousePos.z) end
+	if RivenConfig.Farm then Farm() end
+	if RivenConfig.Movement and ((RivenConfig.Combo or RivenConfig.Harass) and not disableMovement) then myHero:MoveTo(mousePos.x, mousePos.z) end
 end
 
 function Harass()
@@ -50,7 +54,7 @@ function Combo()
 				CastSpell(_R, ts.target.x, ts.target.z)
 			end
 		end
-			CastSpell(_E, ts.target.x, ts.target.z)
+		CastSpell(_E, ts.target.x, ts.target.z)
 		if myHero:CanUseSpell(_W) == READY and GetDistance(ts.target) < 250 then
 			CastSpell(_W)
 		end
@@ -83,6 +87,19 @@ function Killsteal()
 	end
 end
 
+function Farm()
+	for _, minion in pairs(enemyMinions.objects) do
+		local aDmg = getDmg("AD", minion, myHero)
+		if GetDistance(minion) <= (myHero.range + 75) and GetTickCount() > tick + delay and minion.health < aDmg then
+			myHero:Attack(minion)
+			tick = GetTickCount()	
+		end
+	end
+	if RivenConfig.Movement and GetTickCount() > tick + delay then
+		myHero:MoveTo(mousePos.x, mousePos.z)
+	end
+end
+
 function getQRadius()
 	if TargetHaveBuff("RivenFengShuiEngine", myHero) then
 		if qCount == 0 or qCount == 1 or qCount == 3 then 
@@ -108,7 +125,13 @@ function OnProcessSpell(unit, spell)
 end
 
 function OnDraw()
-	DrawCircle(myHero.x, myHero.y, myHero.z, 250, 0xFFFFFF)
+	DrawCircle(myHero.x, myHero.y, myHero.z, 500, 0xFFFFFF)
+	if ts.target then
+		DrawCircle(ts.target.x, ts.target.y, ts.target.z, 150, 0xFF00FF00)
+		DrawCircle(ts.target.x, ts.target.y, ts.target.z, 151, 0xFF00FF00)
+		DrawCircle(ts.target.x, ts.target.y, ts.target.z, 152, 0xFF00FF00)
+		DrawCircle(ts.target.x, ts.target.y, ts.target.z, 153, 0xFF00FF00)
+	end
 end
 
  function OnAnimation(unit,animation)    
