@@ -1,3 +1,5 @@
+if myHero.charName ~= "Cassiopeia" then return end
+
 -- [[ Sida's Cass v1.0 ]] --
 local qPred
 local wPred
@@ -13,10 +15,10 @@ function OnLoad()
 		wPred = TargetPredictionVIP(850, 2000, 0.3)
 	end
 	CassConfig = scriptConfig("Sida's Cass", "sidascass")
-	CassConfig:addParam("Combo", "Combo", SCRIPT_PARAM_ONKEYDOWN, false, 32)
-	CassConfig:addParam("Harass", "Harass", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("C"))
+	CassConfig:addParam("Combo", "Combo", SCRIPT_PARAM_ONKEYDOWN, false, 219)
+	CassConfig:addParam("Harass", "Harass", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("D"))
 	CassConfig:addParam("Farm", "Farm", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("A"))
-	CassConfig:addParam("Tear", "Stack Tear With Q", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("V"))
+	CassConfig:addParam("Tear", "Stack Tear With Q", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("C"))
 	CassConfig:addParam("Spam", "Auto E Poisoned Targets", SCRIPT_PARAM_ONOFF, true)
 	CassConfig:addParam("KillSteal", "Killsteal with E", SCRIPT_PARAM_ONOFF, true)
 	CassConfig:addParam("Movement", "Move To Mouse", SCRIPT_PARAM_ONOFF, true)
